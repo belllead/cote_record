@@ -1,64 +1,79 @@
 package swea.모의_sw_역량테스트;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class ProtectFilm2112 {
 	
 	static int D, W, K, min;
 	static boolean[] visited;
+	static int[] one, zero;
+	static int[][] copy;
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int T = sc.nextInt();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
 		
 		StringBuilder sb = new StringBuilder();
 		
 		for (int tc=1; tc<=T; tc++) {
-			D = sc.nextInt();
-			W = sc.nextInt();
-			K = sc.nextInt();
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			D = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
+			K = Integer.parseInt(st.nextToken());
 			
 			int[][] film = new int[D][W];
+			copy = new int[D][W];
 			visited = new boolean[D];
+			one = new int[W];
+			zero = new int[W];
+			Arrays.fill(one, 1);
+			Arrays.fill(zero, 0);
 			
 			for (int r=0; r<D; r++) {
+				st = new StringTokenizer(br.readLine());
 				for (int c=0; c<W; c++) {
-					film[r][c] = sc.nextInt();
+					int t = Integer.parseInt(st.nextToken());
+					film[r][c] = t;
+					copy[r][c] = t;
 				}
 			}
-			System.out.println(check(film));
 			
+			min = K;
+			
+			treat(film, 0, 0);
 			
 			sb.append("#" + tc + " ");
+			sb.append(min);
 			sb.append("\n");
 		}
 		System.out.println(sb);
 	}
 	
-	static int treat(int[][] film, int n) {
-		if (check(film))
-			return n;
-		
-		if (n == K) 
-			return n;
-		
-		for (int row=0; row<D; row++) {
-			if (!visited[row]) {
-				int[] temp = Arrays.copyOf(film[row], film[row].length);
-				
-				Arrays.fill(film[row], 1);
-				treat(film, n+1);
-				
-				Arrays.fill(film[row], 0);
-				treat(film, n+1);
-				
-				film[row] = temp;
-			}
-				
+	static void treat(int[][] film, int treatCnt, int row) {
+		if (treatCnt >= min) {
+			return;
 		}
 		
-		return 0;
+		if (row == D) {
+			if (check(film)) {
+				min = Math.min(min, treatCnt);
+			}
+			return;
+		}
+				
+		treat(film, treatCnt, row+1);
+		
+		film[row] = one;
+		treat(film, treatCnt+1, row+1);
+		
+		film[row] = zero;
+		treat(film, treatCnt+1, row+1);
+		
+		film[row] = copy[row];
 	}
 	
 	
