@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
-import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class WorkingProcess2056 {
@@ -37,11 +35,11 @@ public class WorkingProcess2056 {
 			}
 		}
 		
-		System.out.println(Arrays.toString(inDegree));
-		System.out.println(Arrays.toString(workTime));
-		
-		for (List<Integer> l : adjList)
-			System.out.println(l);
+//		System.out.println(Arrays.toString(inDegree));
+//		System.out.println(Arrays.toString(workTime));
+//		
+//		for (List<Integer> l : adjList)
+//			System.out.println(l);
 		
 		//입력완료
 		StringBuilder sb = new StringBuilder();
@@ -57,7 +55,7 @@ public class WorkingProcess2056 {
 
 		while (!q.isEmpty()) {
 			int curr = q.poll();
-			
+
 			for (int v : adjList[curr]) {
 				wait[v] = Math.max(wait[v], wait[curr]+workTime[curr]);
 				
@@ -68,7 +66,13 @@ public class WorkingProcess2056 {
 			}
 		}
 
-		System.out.println(Arrays.toString(wait));
+		int max = 0;
+		for (int i=1; i<N+1; i++) {
+			int finalTime = wait[i] + workTime[i];
+			max = Math.max(max, finalTime);
+		}
+		
+		System.out.println(max);
 	}
 
 }
